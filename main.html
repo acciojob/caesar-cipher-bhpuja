@@ -1,16 +1,66 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caesar Cipher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label, input, textarea, button {
+      display: block;
+      margin: 10px 0;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+  <h1>Caesar Cipher</h1>
+  <label for="message">Enter your message:</label>
+  <textarea id="message" placeholder="Type your message here..."></textarea>
 
+  <label for="shift">Enter shift value (e.g., 3 or -1):</label>
+  <input type="number" id="shift" placeholder="Shift value">
+
+  <button id="encodeButton">Encode</button>
+
+  <h2>Encoded Message:</h2>
+  <textarea id="result" readonly placeholder="The encoded message will appear here..."></textarea>
+
+  <script>
+    function caesarCipher(message, shift) {
+      // Normalize the shift value to handle large numbers and negatives
+      shift = shift % 26;
+
+      const shiftChar = (char, base) => {
+        return String.fromCharCode(((char.charCodeAt(0) - base + shift + 26) % 26) + base);
+      };
+
+      return message
+        .split('')
+        .map(char => {
+          if (char >= 'A' && char <= 'Z') {
+            return shiftChar(char, 'A'.charCodeAt(0)); // Shift uppercase
+          } else if (char >= 'a' && char <= 'z') {
+            return shiftChar(char, 'a'.charCodeAt(0)); // Shift lowercase
+          } else {
+            return char; // Leave non-alphabetical characters unchanged
+          }
+        })
+        .join('');
+    }
+
+    document.getElementById("encodeButton").addEventListener("click", () => {
+      const message = document.getElementById("message").value;
+      const shift = parseInt(document.getElementById("shift").value) || 0; // Default to 0 if input is invalid
+      const result = caesarCipher(message, shift);
+      document.getElementById("result").value = result;
+    });
+  </script>
 </body>
-
 </html>
